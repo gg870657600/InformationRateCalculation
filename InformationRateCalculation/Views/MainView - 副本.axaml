@@ -1,0 +1,394 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"           
+             mc:Ignorable="d" d:DesignWidth="400" d:DesignHeight="750" 
+             x:Class="InformationRateCalculation.Views.MainView" FontFamily="avares://InformationRateCalculation/Assets/Microsoft YaHei.ttf"
+             xmlns:vm="clr-namespace:InformationRateCalculation.ViewModels"
+             x:DataType="vm:MainViewModel"
+
+             >
+    <Design.DataContext>
+    <!-- This only sets the DataContext for the previewer in an IDE,
+         to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
+        <vm:MainViewModel />
+    </Design.DataContext>
+       <UserControl.Styles>
+        <Style Selector="TextBlock">
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="FontWeight" Value="Bold"/>            
+            <Setter Property="MaxWidth" Value="200"/>
+            <Setter Property="TextWrapping" Value="Wrap"/>
+        </Style>
+    </UserControl.Styles>
+    <Grid>
+        <Grid.RowDefinitions>
+        <RowDefinition Height="Auto"/> <!-- TabControl Header -->
+        <RowDefinition Height="*"/>    <!-- 内容区 -->
+    </Grid.RowDefinitions>
+
+    <TabControl Grid.Row="0" Grid.RowSpan="2">
+        <TabItem Header="TDM">
+            <!-- 内容随窗口缩放 -->
+            <ScrollViewer FontSize="18">
+                <Grid ShowGridLines="True">
+
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>  
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/> 
+                        <ColumnDefinition Width="*"/>    
+                    </Grid.ColumnDefinitions>
+                        <TextBlock Text="前向纠错码" Grid.Row="0" Grid.Column="0"/>
+					    <ComboBox ItemsSource="{Binding FecOptions}" Margin="2"
+                            SelectedItem="{Binding SelectedFec}" Width="100"
+                            Grid.Row="0" Grid.Column="1" VerticalAlignment="Center"
+                            HorizontalAlignment="Left" />
+                        
+                        
+                        <TextBlock Text="IP包长（Byte）" Grid.Row="1" Grid.Column="0"/>
+                        <NumericUpDown  Value="{Binding IpPktLen}" Minimum="0"  Maximum="2000" 
+                                        ShowButtonSpinner="False" Width="100" 
+                                        Height="20" Margin="2" HorizontalAlignment="Left"
+                                        Grid.Row="1" Grid.Column="1"/>
+                        
+                        <TextBlock Text="调制方式" Grid.Row="2" Grid.Column="0"/>    
+                        <ComboBox ItemsSource="{Binding AvailableModulationOptions}" VerticalAlignment="Center"
+                            SelectedItem="{Binding SelectedModulationOption, Mode=TwoWay}"
+                            Width="100" Margin="2"  Grid.Row="2" Grid.Column="1">
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding DisplayName}"/>
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+                        </ComboBox>
+ 
+                        <TextBlock Text="带宽（KHz）" Grid.Row="3" Grid.Column="0"/>
+                        <NumericUpDown  Value="{Binding Bandwidth}" Minimum="0"  Maximum="1000000" 
+                                        ShowButtonSpinner="False" Width="100" 
+                                        Height="20" Margin="2" HorizontalAlignment="Left"
+                                        Grid.Row="3" Grid.Column="1"/>
+
+                        <TextBlock Text="滚降因子" Grid.Row="4" Grid.Column="0"/>
+                        <NumericUpDown  Value="{Binding Roll}" Minimum="0"  Maximum="1" 
+                                        ShowButtonSpinner="False" Width="100" 
+                                        Height="20" Margin="2" HorizontalAlignment="Left"
+                                        Grid.Row="4" Grid.Column="1"/>
+
+                        <TextBlock Text="符号速率（Ksps）" Grid.Row="5" Grid.Column="0"/>
+                        <NumericUpDown  Value="{Binding SymRate}" Minimum="0"  Maximum="1000000" 
+                                        ShowButtonSpinner="False" Width="100" FormatString="0.00"
+                                        Height="20" Margin="2" HorizontalAlignment="Left"
+                                        Grid.Row="5" Grid.Column="1"/>
+
+                        <TextBlock Text="理论信息速率（Kbps）" Grid.Row="6" Grid.Column="0"/>
+                        <NumericUpDown  Value="{Binding InfoRate}" Minimum="0"  Maximum="1000000" 
+                                        ShowButtonSpinner="False" Width="100" IsEnabled="False"
+                                        Height="20" Margin="2" HorizontalAlignment="Left"
+                                        Grid.Row="6" Grid.Column="1"/>
+
+                        <Expander Header="点击展开/折叠" Grid.ColumnSpan="2" Grid.Row="7" Grid.Column="0" Padding="0">
+                            <Grid >
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>  
+                                    <RowDefinition Height="*"/>
+                                    <RowDefinition Height="*"/>
+                                    <RowDefinition Height="*"/>
+                                    <RowDefinition Height="*"/>
+                                    <RowDefinition Height="*"/>
+                                    <RowDefinition Height="*"/>
+                                    <RowDefinition Height="*"/>
+                                    <RowDefinition Height="*"/>
+                                    <RowDefinition Height="*"/>
+
+                                </Grid.RowDefinitions>
+
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/> 
+                                    <ColumnDefinition Width="*"/>    
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Text="封装后包长" Grid.Row="0" Grid.Column="0"/>
+                                <NumericUpDown  Value="{Binding PktLenAfterEncap}"
+                                        ShowButtonSpinner="False" Width="100" 
+                                        Height="20" Margin="2" HorizontalAlignment="Left"
+                                        Grid.Row="0" Grid.Column="1" IsEnabled="False"/>
+
+                                <TextBlock Text="封装效率" Grid.Row="1" Grid.Column="0"/>
+                                <NumericUpDown  Value="{Binding EncapEff}"
+                                        ShowButtonSpinner="False" Width="100" 
+                                        Height="20" Margin="2" HorizontalAlignment="Left"
+                                        Grid.Row="1" Grid.Column="1" IsEnabled="False"/>
+
+                                        <!-- 动态显示导频间隔对应的帧长 -->
+                                <!-- LDPC 显示 8/16/32；Turbo 显示 32/64 -->
+
+                                <!-- 导频8 -->
+                                <TextBlock Text="导频间隔 8" Grid.Row="2" Grid.Column="0"
+                                       IsVisible="{Binding IsPilot8Visible}"/>
+                                <NumericUpDown Value="{Binding SelectedModulationOption.FrameLen8}" IsEnabled="False"
+                                               ShowButtonSpinner="False" Width="100" Height="20" Margin="2"
+                                               HorizontalAlignment="Left" Grid.Row="2" Grid.Column="1"
+                                               IsVisible="{Binding IsPilot8Visible}"/>
+
+                                <!-- 导频16 -->
+                                <TextBlock Text="导频间隔 16" Grid.Row="3" Grid.Column="0"
+                                       IsVisible="{Binding IsPilot16Visible}"/>
+                                <NumericUpDown Value="{Binding SelectedModulationOption.FrameLen16}" IsEnabled="False"
+                                               ShowButtonSpinner="False" Width="100" Height="20" Margin="2"
+                                               HorizontalAlignment="Left" Grid.Row="3" Grid.Column="1"
+                                               IsVisible="{Binding IsPilot16Visible}"/>
+
+                                <!-- 导频32 -->
+                                <TextBlock Text="导频间隔 32" Grid.Row="4" Grid.Column="0"
+                                       IsVisible="{Binding IsPilot32Visible}"/>
+                                <NumericUpDown Value="{Binding SelectedModulationOption.FrameLen32}" IsEnabled="False"
+                                               ShowButtonSpinner="False" Width="100" Height="20" Margin="2"
+                                               HorizontalAlignment="Left" Grid.Row="4" Grid.Column="1"
+                                               IsVisible="{Binding IsPilot32Visible}"/>
+
+                                <!-- 导频64 -->
+                                <TextBlock Text="导频间隔 64" Grid.Row="5" Grid.Column="0"
+                                       IsVisible="{Binding IsPilot64Visible}"/>
+                                <NumericUpDown Value="{Binding SelectedModulationOption.FrameLen64}" IsEnabled="False"
+                                               ShowButtonSpinner="False" Width="100" Height="20" Margin="2"
+                                               HorizontalAlignment="Left" Grid.Row="5" Grid.Column="1"
+                                               IsVisible="{Binding IsPilot64Visible}"/>
+
+                                <!-- 物理帧符号 -->
+                                <TextBlock Text="物理帧符号" Grid.Row="6" Grid.Column="0" />
+                                <NumericUpDown Value="{Binding PhysicalFrameLength}" IsEnabled="False"
+                                               ShowButtonSpinner="False" Width="100" Height="20" Margin="2"
+                                               HorizontalAlignment="Left" Grid.Row="6" Grid.Column="1" />
+
+                                <!-- 单个符号传输时间（us） -->
+                                <TextBlock Text="单个符号传输时间（us）" Grid.Row="7" Grid.Column="0" />
+                                <NumericUpDown Value="{Binding SymbolTime}" IsEnabled="False"
+                                               ShowButtonSpinner="False" Width="100" Height="20" Margin="2"
+                                               HorizontalAlignment="Left" Grid.Row="7" Grid.Column="1" />
+
+                                <!-- 传输一个包的理论时延（ms） -->
+                                <TextBlock Text="传输一个包的理论时延（ms）" Grid.Row="8" Grid.Column="0" />
+                                <NumericUpDown Value="{Binding PktTheoLatency}" IsEnabled="False"
+                                               ShowButtonSpinner="False" Width="100" Height="20" Margin="2"
+                                               HorizontalAlignment="Left" Grid.Row="8" Grid.Column="1" />
+
+                                <!-- 物理帧总个数 -->
+                                <TextBlock Text="物理帧总个数" Grid.Row="9" Grid.Column="0" />
+                                <NumericUpDown Value="{Binding TotalPhyFrames}" IsEnabled="False"
+                                               ShowButtonSpinner="False" Width="100" Height="20" Margin="2"
+                                               HorizontalAlignment="Left" Grid.Row="9" Grid.Column="1" />
+                            </Grid>
+                        </Expander>
+
+
+                        
+                    
+                </Grid>
+                
+
+            </ScrollViewer>
+        </TabItem>
+        <TabItem Header="TDMA">
+            <ScrollViewer FontSize="18">
+                <Grid ShowGridLines="True">
+
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>  
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/> 
+                        <ColumnDefinition Width="*"/>    
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock Text="超帧周期 = 500ms" Grid.Row="0" Grid.Column="0"/>
+                    <TextBlock Text="符号速率（Ksps）" Grid.Row="1" Grid.Column="0"/>
+                    <ComboBox ItemsSource="{Binding TdmaSymRate}" Margin="2"
+                            SelectedItem="{Binding SelectedSymRate}" Width="100"
+                            Grid.Row="1" Grid.Column="1" VerticalAlignment="Center"
+                            HorizontalAlignment="Left" />
+
+                    <TextBlock Text="控制时隙分配占比" Grid.Row="2" Grid.Column="0"/>
+					<NumericUpDown  Value="{Binding CtrlSlotRatio, StringFormat={}{0:0.0}}" Minimum="0"  Maximum="1" 
+                                    ShowButtonSpinner="False" Width="100" 
+                                    Height="20" Margin="2" HorizontalAlignment="Left"
+                                    Grid.Row="2" Grid.Column="1"/>
+                    <TextBlock Text="{Binding CtrlSlotRatio, StringFormat='{}{0:P0}'}"
+                               HorizontalAlignment="Right" Margin="2" Grid.Row="2" Grid.Column="1"/>
+                        
+                    <TextBlock Text="登录载波否" Grid.Row="3" Grid.Column="0"/>
+					<ComboBox  Margin="2" Width="100" Grid.Row="3" Grid.Column="1"
+                                VerticalAlignment="Center" HorizontalAlignment="Left"
+                                ItemsSource="{Binding LoginOptions}" 
+                                SelectedItem="{Binding SelectedLoginOptions}"/>
+
+                    <TextBlock Text="登录时隙长度（ms）" Grid.Row="4" Grid.Column="0"/>
+					<NumericUpDown  Value="{Binding LoginSlotLen}"  
+                                    ShowButtonSpinner="False" Width="100" 
+                                    Height="20" Margin="2" HorizontalAlignment="Left"
+                                    Grid.Row="4" Grid.Column="1"/>
+
+                    <TextBlock Text="测试包长（Byte）" Grid.Row="5" Grid.Column="0"/>
+					<NumericUpDown  Value="{Binding TestPktLen}" FormatString="0"
+                                    ShowButtonSpinner="False" Width="100" 
+                                    Height="20" Margin="2" HorizontalAlignment="Left"
+                                    Grid.Row="5" Grid.Column="1"/>
+
+                    <TextBlock Text="时隙长短" Grid.Row="6" Grid.Column="0"/>
+					<ComboBox  Margin="2" Width="100" Grid.Row="6" Grid.Column="1" 
+                                VerticalAlignment="Center" HorizontalAlignment="Left"
+                                ItemsSource="{Binding SlotLenOptions}" SelectedItem="{Binding SelectedSlotLen}"/>
+
+                    <TextBlock Text="调制方式" Grid.Row="7" Grid.Column="0"/>    
+                    <ComboBox ItemsSource="{Binding AvailableModulationOptions2}" VerticalAlignment="Center"
+                        SelectedItem="{Binding SelectedModulationOption2}"
+                        Width="100" Margin="2"  Grid.Row="7" Grid.Column="1">
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Modulation_CodeRate}"/>
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
+
+                    <TextBlock Text="不切片最大业务信息速率（kbps）" Grid.Row="8" Grid.Column="0"/>
+					<NumericUpDown  Value="{Binding SelectedModulationOption2.MaxUnslicedServiceDataRate}" 
+                                    ShowButtonSpinner="False" Width="100" IsEnabled="False"
+                                    Height="20" Margin="2" HorizontalAlignment="Left"
+                                    Grid.Row="8" Grid.Column="1"/>
+
+                    <TextBlock Text="切片调整后最大业务信息速率（kbps）" TextWrapping="Wrap"  Grid.Row="9" Grid.Column="0"/>
+					<NumericUpDown  Value="{Binding SelectedModulationOption2.AdjustedMaxServiceDataRate}" 
+                                    ShowButtonSpinner="False" Width="100" IsEnabled="False"
+                                    Height="20" Margin="2" HorizontalAlignment="Left"
+                                    Grid.Row="9" Grid.Column="1"/>
+
+                    <Expander Header="点击展开/折叠" Grid.ColumnSpan="2" Grid.Row="10" Grid.Column="0" Padding="0">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="*"/>  
+                                    <RowDefinition Height="*"/>
+                                    <RowDefinition Height="*"/>
+                                    <RowDefinition Height="*"/>
+                                    <RowDefinition Height="*"/>
+                                    <RowDefinition Height="*"/>
+                                    <RowDefinition Height="*"/>
+                                    <RowDefinition Height="*"/>
+                                    <RowDefinition Height="*"/>
+                                    <RowDefinition Height="*"/>
+                                    <RowDefinition Height="*"/>
+                                    <RowDefinition Height="*"/>
+                                    <RowDefinition Height="*"/>
+                                    <RowDefinition Height="*"/>
+                                    <RowDefinition Height="*"/>
+                                </Grid.RowDefinitions>
+
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/> 
+                                    <ColumnDefinition Width="*"/>    
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Text="扩频因子" Grid.Row="0" Grid.Column="0"/>
+                                <NumericUpDown  Value="{Binding SelectedModulationOption2.SF}"
+                                        ShowButtonSpinner="False" Width="100" 
+                                        Height="20" Margin="2" HorizontalAlignment="Left"
+                                        Grid.Row="0" Grid.Column="1" IsEnabled="False"/>
+
+                                <TextBlock Text="有效载荷（byte）" Grid.Row="1" Grid.Column="0"/>
+                                <NumericUpDown  Value="{Binding SelectedModulationOption2.PayloadLength}"
+                                        ShowButtonSpinner="False" Width="100" 
+                                        Height="20" Margin="2" HorizontalAlignment="Left"
+                                        Grid.Row="1" Grid.Column="1" IsEnabled="False"/>
+
+                                <TextBlock Text="有效符号（sym）" Grid.Row="2" Grid.Column="0" />
+                                <NumericUpDown Value="{Binding SelectedModulationOption2.PayloadSymbolCount}" IsEnabled="False"
+                                               ShowButtonSpinner="False" Width="100" Height="20" Margin="2"
+                                               HorizontalAlignment="Left" Grid.Row="2" Grid.Column="1" />
+
+                                <TextBlock Text="总符号数（chip）" Grid.Row="3" Grid.Column="0" />
+                                <NumericUpDown Value="{Binding SelectedModulationOption2.TotalChipCount}" IsEnabled="False"
+                                               ShowButtonSpinner="False" Width="100" Height="20" Margin="2"
+                                               HorizontalAlignment="Left" Grid.Row="3" Grid.Column="1" />
+
+                                <TextBlock Text="前导长度（sym）" Grid.Row="4" Grid.Column="0" />
+                                <NumericUpDown Value="{Binding SelectedModulationOption2.PreambleLength}" IsEnabled="False"
+                                               ShowButtonSpinner="False" Width="100" Height="20" Margin="2"
+                                               HorizontalAlignment="Left" Grid.Row="4" Grid.Column="1" />
+
+                                <TextBlock Text="后导长度（sym）" Grid.Row="5" Grid.Column="0" />
+                                <NumericUpDown Value="{Binding SelectedModulationOption2.PostambleLength}" IsEnabled="False"
+                                               ShowButtonSpinner="False" Width="100" Height="20" Margin="2"
+                                               HorizontalAlignment="Left" Grid.Row="5" Grid.Column="1" />
+
+                                <TextBlock Text="导频周期（sym）" Grid.Row="6" Grid.Column="0" />
+                                <NumericUpDown Value="{Binding SelectedModulationOption2.PilotPeriod}" IsEnabled="False"
+                                               ShowButtonSpinner="False" Width="100" Height="20" Margin="2"
+                                               HorizontalAlignment="Left" Grid.Row="6" Grid.Column="1" />
+
+                                <TextBlock Text="导频块长度（sym）" Grid.Row="7" Grid.Column="0" />
+                                <NumericUpDown Value="{Binding SelectedModulationOption2.PilotBlockLength}" IsEnabled="False"
+                                               ShowButtonSpinner="False" Width="100" Height="20" Margin="2"
+                                               HorizontalAlignment="Left" Grid.Row="7" Grid.Column="1" />
+
+                                <TextBlock Text="导频总数（sym）" Grid.Row="8" Grid.Column="0" />
+                                <NumericUpDown Value="{Binding SelectedModulationOption2.PreambleTotal}" IsEnabled="False"
+                                               ShowButtonSpinner="False" Width="100" Height="20" Margin="2"
+                                               HorizontalAlignment="Left" Grid.Row="8" Grid.Column="1" />
+
+                                <TextBlock Text="FPDU总长度（字节）" Grid.Row="9" Grid.Column="0" />
+                                <NumericUpDown Value="{Binding SelectedModulationOption2.FpduSize}" IsEnabled="False"
+                                               ShowButtonSpinner="False" Width="100" Height="20" Margin="2"
+                                               HorizontalAlignment="Left" Grid.Row="9" Grid.Column="1" />
+
+                                <TextBlock Text="时隙长度（sym）" Grid.Row="10" Grid.Column="0" />
+                                <NumericUpDown Value="{Binding SelectedModulationOption2.SlotLength}" IsEnabled="False"
+                                               ShowButtonSpinner="False" Width="100" Height="20" Margin="2"
+                                               HorizontalAlignment="Left" Grid.Row="10" Grid.Column="1" />
+
+                                <TextBlock Text="时隙突发bit效率（%）" Grid.Row="11" Grid.Column="0" />
+                                <NumericUpDown Value="{Binding SelectedModulationOption2.SlotBitEfficiency}" IsEnabled="False"
+                                               ShowButtonSpinner="False" Width="100" Height="20" Margin="2"
+                                               HorizontalAlignment="Left" Grid.Row="11" Grid.Column="1" />
+
+                                <TextBlock Text="超帧周期可分配时隙总数（个）" Grid.Row="12" Grid.Column="0" />
+                                <NumericUpDown Value="{Binding SelectedModulationOption2.AvailableSlotsPerSuperframe}" IsEnabled="False"
+                                               ShowButtonSpinner="False" Width="100" Height="20" Margin="2"
+                                               HorizontalAlignment="Left" Grid.Row="12" Grid.Column="1" />
+
+                                <TextBlock Text="超帧周期内控制时隙分配数（个）" Grid.Row="13" Grid.Column="0" />
+                                <NumericUpDown Value="{Binding SelectedModulationOption2.ControlSlotsPerSuperframe}" IsEnabled="False"
+                                               ShowButtonSpinner="False" Width="100" Height="20" Margin="2"
+                                               HorizontalAlignment="Left" Grid.Row="13" Grid.Column="1" />
+
+                                <TextBlock Text="超帧周期内可分配最大业务时隙（个）" Grid.Row="14" Grid.Column="0" />
+                                <NumericUpDown Value="{Binding SelectedModulationOption2.MaxServiceSlotsPerSuperframe}" IsEnabled="False"
+                                               ShowButtonSpinner="False" Width="100" Height="20" Margin="2"
+                                               HorizontalAlignment="Left" Grid.Row="14" Grid.Column="1" />
+                            </Grid>
+                        </Expander>
+                </Grid>
+            </ScrollViewer>
+        </TabItem>
+    </TabControl>
+
+
+    </Grid>
+</UserControl> 
