@@ -591,6 +591,82 @@ public partial class MainViewModel : ViewModelBase
         FilteredThresholdData = new ObservableCollection<TdmThresholdOption>(_allThresholdData);
     }
     #endregion
+
+    #region TDMA门限
+    public List<string> TdmaWaveIdOptions { get; } = new()
+    {
+        "wave_id4","wave_id5","wave_id6","wave_id7","wave_id8","wave_id9","wave_id10","wave_id11","wave_id12","wave_id13",
+        "wave_id14","wave_id15","wave_id16","wave_id17","wave_id18","wave_id19","wave_id20","wave_id21","wave_id22","wave_id23"
+    };
+    public List<string> TdmaSlotTypeOptions { get; } = new() { "短时隙", "长时隙" };
+    public List<string> TdmaModcodOptions { get; } = new()
+    {
+        "QPSK_1/3","QPSK_1/2","QPSK_2/3","QPSK_3/4","QPSK_5/6",
+        "8PSK_2/3","8PSK_3/4","8PSK_5/6",
+        "16QAM_3/4","16QAM_5/6"
+    };
+
+    [ObservableProperty] private string? _selectedTdmaWaveId;
+    [ObservableProperty] private string? _selectedTdmaSlotType;
+    [ObservableProperty] private string? _selectedTdmaModcod;
+
+    [ObservableProperty]
+    private ObservableCollection<TdmaThresholdOption> _filteredTdmaThresholdData = new();
+
+    private readonly List<TdmaThresholdOption> _allTdmaThresholdData = new()
+    {
+        // 短时隙 (wave_id4 - wave_id13)
+        new() { ClockMode="内时钟", WaveId="wave_id4",  SlotType="短时隙", Modcod="QPSK_1/3",  SpectralEfficiency=0.6667m, EsN0Theory=1.82m,  DvbS2Threshold=0.22m,  RollOff=0.20m, EsPlusN0=3.921m,  InitialEsPlusN0=3.921m },
+        new() { ClockMode="内时钟", WaveId="wave_id5",  SlotType="短时隙", Modcod="QPSK_1/2",  SpectralEfficiency=1.0000m, EsN0Theory=3.10m,  DvbS2Threshold=2.34m,  RollOff=0.20m, EsPlusN0=4.556m,  InitialEsPlusN0=4.556m },
+        new() { ClockMode="内时钟", WaveId="wave_id6",  SlotType="短时隙", Modcod="QPSK_2/3",  SpectralEfficiency=1.3333m, EsN0Theory=4.86m,  DvbS2Threshold=4.29m,  RollOff=0.20m, EsPlusN0=5.961m,  InitialEsPlusN0=5.961m },
+        new() { ClockMode="内时钟", WaveId="wave_id7",  SlotType="短时隙", Modcod="QPSK_3/4",  SpectralEfficiency=1.5000m, EsN0Theory=5.73m,  DvbS2Threshold=5.36m,  RollOff=0.20m, EsPlusN0=6.558m,  InitialEsPlusN0=6.558m },
+        new() { ClockMode="内时钟", WaveId="wave_id8",  SlotType="短时隙", Modcod="QPSK_5/6",  SpectralEfficiency=1.6667m, EsN0Theory=7.03m,  DvbS2Threshold=6.68m,  RollOff=0.20m, EsPlusN0=7.663m,  InitialEsPlusN0=7.663m },
+        new() { ClockMode="内时钟", WaveId="wave_id9",  SlotType="短时隙", Modcod="8PSK_2/3",  SpectralEfficiency=2.0000m, EsN0Theory=8.58m,  DvbS2Threshold=8.08m,  RollOff=0.20m, EsPlusN0=9.087m,  InitialEsPlusN0=9.087m },
+        new() { ClockMode="内时钟", WaveId="wave_id10", SlotType="短时隙", Modcod="8PSK_3/4",  SpectralEfficiency=2.2500m, EsN0Theory=9.90m,  DvbS2Threshold=9.31m,  RollOff=0.20m, EsPlusN0=10.452m, InitialEsPlusN0=10.452m },
+        new() { ClockMode="内时钟", WaveId="wave_id11", SlotType="短时隙", Modcod="8PSK_5/6",  SpectralEfficiency=2.5000m, EsN0Theory=11.40m, DvbS2Threshold=10.85m, RollOff=0.20m, EsPlusN0=11.589m, InitialEsPlusN0=11.589m },
+        new() { ClockMode="内时钟", WaveId="wave_id12", SlotType="短时隙", Modcod="16QAM_3/4", SpectralEfficiency=3.0000m, EsN0Theory=11.87m, DvbS2Threshold=11.17m, RollOff=0.20m, EsPlusN0=12.288m, InitialEsPlusN0=12.288m },
+        new() { ClockMode="内时钟", WaveId="wave_id13", SlotType="短时隙", Modcod="16QAM_5/6", SpectralEfficiency=3.3333m, EsN0Theory=13.49m, DvbS2Threshold=12.56m, RollOff=0.20m, EsPlusN0=13.828m, InitialEsPlusN0=13.828m },
+        // 长时隙 (wave_id14 - wave_id23)
+        new() { ClockMode="内时钟", WaveId="wave_id14", SlotType="长时隙", Modcod="QPSK_1/3",  SpectralEfficiency=0.6667m, EsN0Theory=0.28m,  DvbS2Threshold=-0.51m, RollOff=0.20m, EsPlusN0=3.031m,  InitialEsPlusN0=3.031m },
+        new() { ClockMode="内时钟", WaveId="wave_id15", SlotType="长时隙", Modcod="QPSK_1/2",  SpectralEfficiency=1.0000m, EsN0Theory=2.21m,  DvbS2Threshold=1.71m,  RollOff=0.20m, EsPlusN0=4.008m,  InitialEsPlusN0=4.008m },
+        new() { ClockMode="内时钟", WaveId="wave_id16", SlotType="长时隙", Modcod="QPSK_2/3",  SpectralEfficiency=1.3333m, EsN0Theory=4.11m,  DvbS2Threshold=3.69m,  RollOff=0.20m, EsPlusN0=5.184m,  InitialEsPlusN0=5.184m },
+        new() { ClockMode="内时钟", WaveId="wave_id17", SlotType="长时隙", Modcod="QPSK_3/4",  SpectralEfficiency=1.5000m, EsN0Theory=5.00m,  DvbS2Threshold=4.73m,  RollOff=0.20m, EsPlusN0=6.119m,  InitialEsPlusN0=6.119m },
+        new() { ClockMode="内时钟", WaveId="wave_id18", SlotType="长时隙", Modcod="QPSK_5/6",  SpectralEfficiency=1.6667m, EsN0Theory=6.32m,  DvbS2Threshold=5.94m,  RollOff=0.20m, EsPlusN0=6.953m,  InitialEsPlusN0=6.953m },
+        new() { ClockMode="内时钟", WaveId="wave_id19", SlotType="长时隙", Modcod="8PSK_2/3",  SpectralEfficiency=2.0000m, EsN0Theory=7.91m,  DvbS2Threshold=7.49m,  RollOff=0.20m, EsPlusN0=8.423m,  InitialEsPlusN0=8.423m },
+        new() { ClockMode="内时钟", WaveId="wave_id20", SlotType="长时隙", Modcod="8PSK_3/4",  SpectralEfficiency=2.2500m, EsN0Theory=9.19m,  DvbS2Threshold=8.77m,  RollOff=0.20m, EsPlusN0=9.507m,  InitialEsPlusN0=9.507m },
+        new() { ClockMode="内时钟", WaveId="wave_id21", SlotType="长时隙", Modcod="8PSK_5/6",  SpectralEfficiency=2.5000m, EsN0Theory=10.61m, DvbS2Threshold=10.23m, RollOff=0.20m, EsPlusN0=10.972m, InitialEsPlusN0=10.972m },
+        new() { ClockMode="内时钟", WaveId="wave_id22", SlotType="长时隙", Modcod="16QAM_3/4", SpectralEfficiency=3.0000m, EsN0Theory=11.50m, DvbS2Threshold=10.72m, RollOff=0.20m, EsPlusN0=11.779m, InitialEsPlusN0=11.779m },
+        new() { ClockMode="内时钟", WaveId="wave_id23", SlotType="长时隙", Modcod="16QAM_5/6", SpectralEfficiency=3.3333m, EsN0Theory=13.03m, DvbS2Threshold=12.04m, RollOff=0.20m, EsPlusN0=13.174m, InitialEsPlusN0=13.174m }
+    };
+
+    partial void OnSelectedTdmaWaveIdChanged(string? value) => UpdateFilteredTdmaThresholdData();
+    partial void OnSelectedTdmaSlotTypeChanged(string? value) => UpdateFilteredTdmaThresholdData();
+    partial void OnSelectedTdmaModcodChanged(string? value) => UpdateFilteredTdmaThresholdData();
+
+    private void UpdateFilteredTdmaThresholdData()
+    {
+        IEnumerable<TdmaThresholdOption> query = _allTdmaThresholdData;
+        if (!string.IsNullOrEmpty(SelectedTdmaSlotType))
+            query = query.Where(t => t.SlotType == SelectedTdmaSlotType);
+        if (!string.IsNullOrEmpty(SelectedTdmaModcod))
+            query = query.Where(t => t.Modcod == SelectedTdmaModcod);
+        if (!string.IsNullOrEmpty(SelectedTdmaWaveId))
+            query = query.Where(t => t.WaveId == SelectedTdmaWaveId);
+        FilteredTdmaThresholdData = new ObservableCollection<TdmaThresholdOption>(query);
+    }
+
+    public void RestoreTdmaThresholdDefaults()
+    {
+        foreach (var item in _allTdmaThresholdData)
+        {
+            item.EsPlusN0 = item.InitialEsPlusN0;
+        }
+        SelectedTdmaWaveId = null;
+        SelectedTdmaSlotType = null;
+        SelectedTdmaModcod = null;
+        FilteredTdmaThresholdData = new ObservableCollection<TdmaThresholdOption>(_allTdmaThresholdData);
+    }
+    #endregion
 }
 public class ModulationOption
 {
@@ -754,4 +830,32 @@ public class KspsConverter : IValueConverter
         => value is decimal d ? $"{d} Ksps" : string.Empty;
     public object ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
         => throw new NotSupportedException();
+}
+
+public partial class TdmaThresholdOption : ObservableObject
+{
+    [ObservableProperty] private string _clockMode = string.Empty;
+    [ObservableProperty] private string _waveId = string.Empty;
+    [ObservableProperty] private string _slotType = string.Empty;
+    [ObservableProperty] private string _modcod = string.Empty;
+    [ObservableProperty] private decimal _spectralEfficiency;
+    [ObservableProperty] private decimal _esN0Theory;
+    [ObservableProperty] private decimal _dvbS2Threshold;
+    [ObservableProperty] private decimal _rollOff;
+    [ObservableProperty] private decimal _esPlusN0;
+
+    public decimal InitialEsPlusN0 { get; set; }
+
+    public decimal EsN0 => 10m * (decimal)Math.Log10((double)(decimal)Math.Pow(10, (double)EsPlusN0 / 10) - 1);
+    public decimal EbN0 => EsN0 - 10m * (decimal)Math.Log10((double)SpectralEfficiency);
+    public decimal TheoryDiff => EsN0 - EsN0Theory;
+    public decimal DvbS2Diff => EsN0 - DvbS2Threshold;
+
+    partial void OnEsPlusN0Changed(decimal value)
+    {
+        OnPropertyChanged(nameof(EsN0));
+        OnPropertyChanged(nameof(EbN0));
+        OnPropertyChanged(nameof(TheoryDiff));
+        OnPropertyChanged(nameof(DvbS2Diff));
+    }
 }
