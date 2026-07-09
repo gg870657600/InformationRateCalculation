@@ -23,6 +23,7 @@ public partial class MainViewModel : ViewModelBase
         OnSelectedFecChanged(SelectedFec);
         OnSelectedSlotLenChanged(SelectedSlotLen);
         FilteredThresholdData = new ObservableCollection<TdmThresholdOption>(_allThresholdData);
+        FilteredTdmaThresholdData = new ObservableCollection<TdmaThresholdOption>(_allTdmaThresholdData);
     }
     // ✅ FEC 选项列表（固定不变）
     #region TDM
@@ -828,6 +829,15 @@ public class KspsConverter : IValueConverter
     public static readonly KspsConverter Instance = new();
     public object Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
         => value is decimal d ? $"{d} Ksps" : string.Empty;
+    public object ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
+        => throw new NotSupportedException();
+}
+
+public class TabIndexToBoolConverter : IValueConverter
+{
+    public static readonly TabIndexToBoolConverter Instance = new();
+    public object Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
+        => value is int index && parameter is string s && int.TryParse(s, out int p) && index == p;
     public object ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
         => throw new NotSupportedException();
 }

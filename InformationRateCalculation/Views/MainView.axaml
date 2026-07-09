@@ -125,10 +125,50 @@
                 Margin="10"
                 Background="White"
                 Padding="2">
-            <TabControl>
-                <!-- TDM Tab 内容：完全保留你原有 NumericUpDown 配置（包括 StringFormat） -->
-                <TabItem Header="TDM">
-                    <ScrollViewer FontSize="18">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <!-- Tab导航：可横向滚动 -->
+                <Border Grid.Row="0" BorderThickness="0,0,0,1" BorderBrush="#D1D5DB">
+                    <ListBox Name="TabNav" SelectedIndex="0" BorderThickness="0"
+                             ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                             ScrollViewer.VerticalScrollBarVisibility="Disabled"
+                             Background="Transparent">
+                        <ListBox.Styles>
+                            <Style Selector="ListBoxItem">
+                                <Setter Property="Padding" Value="15 10"/>
+                                <Setter Property="Margin" Value="2 0"/>
+                                <Setter Property="Background" Value="#E9EDF2"/>
+                                <Setter Property="Foreground" Value="#6B7280"/>
+                                <Setter Property="FontWeight" Value="Medium"/>
+                                <Setter Property="VerticalContentAlignment" Value="Center"/>
+                                <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                            </Style>
+                            <Style Selector="ListBoxItem:selected">
+                                <Setter Property="Background" Value="White"/>
+                                <Setter Property="Foreground" Value="#1E88E5"/>
+                                <Setter Property="FontWeight" Value="Bold"/>
+                            </Style>
+                            <Style Selector="ListBoxItem:pointerover">
+                                <Setter Property="Background" Value="#DCE3ED"/>
+                                <Setter Property="Foreground" Value="#4299E1"/>
+                            </Style>
+                        </ListBox.Styles>
+                        <ListBoxItem Content="TDM"/>
+                        <ListBoxItem Content="TDMA"/>
+                        <ListBoxItem Content="TDM门限"/>
+                        <ListBoxItem Content="TDMA门限"/>
+                    </ListBox>
+                </Border>
+
+                <!-- Tab内容 -->
+                <Panel Grid.Row="1">
+                    <Border IsVisible="{Binding #TabNav.SelectedIndex, Converter={x:Static vm:TabIndexToBoolConverter.Instance}, ConverterParameter=0}">
+                        <!-- TDM Tab -->
+                        <ScrollViewer FontSize="18">
                         <Grid ShowGridLines="False">
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="*"/>  
@@ -279,10 +319,10 @@
                             </Expander>
                         </Grid>
                     </ScrollViewer>
-                </TabItem>
+                    </Border>
 
-                <!-- TDMA Tab 内容：完全保留你原有 NumericUpDown 配置（包括 StringFormat） -->
-                <TabItem Header="TDMA">
+                    <!-- TDMA Tab -->
+                    <Border IsVisible="{Binding #TabNav.SelectedIndex, Converter={x:Static vm:TabIndexToBoolConverter.Instance}, ConverterParameter=1}">
                     <ScrollViewer FontSize="18">
                         <Grid ShowGridLines="False">
                             <Grid.RowDefinitions>
@@ -472,10 +512,10 @@
                             </Expander>
                         </Grid>
                     </ScrollViewer>
-                </TabItem>
+                    </Border>
 
-                <!-- TDM门限 Tab -->
-                <TabItem Header="TDM门限">
+                    <!-- TDM门限 Tab -->
+                    <Border IsVisible="{Binding #TabNav.SelectedIndex, Converter={x:Static vm:TabIndexToBoolConverter.Instance}, ConverterParameter=2}">
                     <Grid  HorizontalAlignment="Stretch">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto"/>
@@ -558,10 +598,10 @@
                             </StackPanel>
                         </ScrollViewer>
                     </Grid>
-                </TabItem>
+                    </Border>
 
-                <!-- TDMA门限 Tab -->
-                <TabItem Header="TDMA门限">
+                    <!-- TDMA门限 Tab -->
+                    <Border IsVisible="{Binding #TabNav.SelectedIndex, Converter={x:Static vm:TabIndexToBoolConverter.Instance}, ConverterParameter=3}">
                     <Grid Margin="5" HorizontalAlignment="Stretch">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto"/>
@@ -632,7 +672,7 @@
                                                     <TextBlock Grid.Column="7" Text="{Binding RollOff, StringFormat='{}{0:F2}'}" HorizontalAlignment="Center"/>
                                                     <TextBox Grid.Column="8" Text="{Binding EsPlusN0, StringFormat='{}{0:F3}'}"
                                                              HorizontalAlignment="Center" VerticalAlignment="Center"
-                                                             Background="Transparent" BorderThickness="0" Padding="2,2" FontSize="14"/>
+                                                             Background="Transparent" BorderThickness="0"  FontSize="14"/>
                                                     <TextBlock Grid.Column="9" Text="{Binding EsN0, StringFormat='{}{0:F2}'}" HorizontalAlignment="Center"/>
                                                     <TextBlock Grid.Column="10" Text="{Binding EbN0, StringFormat='{}{0:F2}'}" HorizontalAlignment="Center"/>
                                                     <TextBlock Grid.Column="11" Text="{Binding TheoryDiff, StringFormat='{}{0:F2}'}" HorizontalAlignment="Center"/>
@@ -645,8 +685,9 @@
                             </StackPanel>
                         </ScrollViewer>
                     </Grid>
-                </TabItem>
-            </TabControl>
+                    </Border>
+                </Panel>
+            </Grid>
         </Border>
     </Grid>
 </UserControl>
