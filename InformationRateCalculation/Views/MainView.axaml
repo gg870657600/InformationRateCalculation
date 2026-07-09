@@ -513,32 +513,53 @@
                         </ScrollViewer>
 
                         <!-- 数据表格 -->
-                        <DataGrid Grid.Row="1"
-                                  ItemsSource="{Binding FilteredThresholdData}"
-                                  AutoGenerateColumns="False"
-                                  IsReadOnly="False"
-                                  CanUserResizeColumns="False"
-                                  GridLinesVisibility="Horizontal"
-                                  BorderThickness="1"
-                                  BorderBrush="#D1D5DB"
-                                  Background="White"
-                                  FontSize="14"
-                                  RowHeight="30"
-                                  ColumnHeaderHeight="35"
-                                  HorizontalAlignment="Stretch">
-                            <DataGrid.Columns>
-                                <DataGridTextColumn Header="符号速率(Ksps)" Binding="{Binding SymbolRate}" IsReadOnly="True" Width="130"/>
-                                <DataGridTextColumn Header="调制方式" Binding="{Binding Modulation}" IsReadOnly="True" Width="100"/>
-                                <DataGridTextColumn Header="编码码率" Binding="{Binding CodeRate}" IsReadOnly="True" Width="100"/>
-                                <DataGridTextColumn Header="滚降" Binding="{Binding RollOff, StringFormat='{}{0:F2}'}" IsReadOnly="True" Width="70"/>
-                                <DataGridTextColumn Header="谱效率" Binding="{Binding SpectralEfficiency, StringFormat='{}{0:F4}'}" IsReadOnly="True" Width="100"/>
-                                <DataGridTextColumn Header="理论门限值" Binding="{Binding TheoreticalThreshold, StringFormat='{}{0:F2}'}" IsReadOnly="True" Width="110"/>
-                                <DataGridTextColumn Header="(Es+N0)/N0" Binding="{Binding EsPlusN0, StringFormat='{}{0:F3}'}" IsReadOnly="False" Width="120"/>
-                                <DataGridTextColumn Header="Es/N0" Binding="{Binding EsN0, StringFormat='{}{0:F2}'}" IsReadOnly="True" Width="90"/>
-                                <DataGridTextColumn Header="Eb/N0" Binding="{Binding EbN0, StringFormat='{}{0:F2}'}" IsReadOnly="True" Width="90"/>
-                                <DataGridTextColumn Header="门限偏差" Binding="{Binding ThresholdDeviation, StringFormat='{}{0:F2}'}" IsReadOnly="True" Width="100"/>
-                            </DataGrid.Columns>
-                        </DataGrid>
+                        <Grid Grid.Row="1">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+
+                            <!-- 表头 -->
+                            <Grid ColumnDefinitions="130,100,100,70,100,110,120,90,90,100"
+                                  Background="#E9EDF2" Margin="0" Padding="4,5">
+                                <TextBlock Grid.Column="0" Text="符号速率(Ksps)" FontWeight="Bold" HorizontalAlignment="Center"/>
+                                <TextBlock Grid.Column="1" Text="调制方式" FontWeight="Bold" HorizontalAlignment="Center"/>
+                                <TextBlock Grid.Column="2" Text="编码码率" FontWeight="Bold" HorizontalAlignment="Center"/>
+                                <TextBlock Grid.Column="3" Text="滚降" FontWeight="Bold" HorizontalAlignment="Center"/>
+                                <TextBlock Grid.Column="4" Text="谱效率" FontWeight="Bold" HorizontalAlignment="Center"/>
+                                <TextBlock Grid.Column="5" Text="理论门限值" FontWeight="Bold" HorizontalAlignment="Center"/>
+                                <TextBlock Grid.Column="6" Text="(Es+N0)/N0" FontWeight="Bold" HorizontalAlignment="Center"/>
+                                <TextBlock Grid.Column="7" Text="Es/N0" FontWeight="Bold" HorizontalAlignment="Center"/>
+                                <TextBlock Grid.Column="8" Text="Eb/N0" FontWeight="Bold" HorizontalAlignment="Center"/>
+                                <TextBlock Grid.Column="9" Text="门限偏差" FontWeight="Bold" HorizontalAlignment="Center"/>
+                            </Grid>
+
+                            <!-- 表体 -->
+                            <ScrollViewer Grid.Row="1" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+                                <ItemsControl ItemsSource="{Binding FilteredThresholdData}">
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <Grid ColumnDefinitions="130,100,100,70,100,110,120,90,90,100"
+                                                  Background="White" BorderThickness="0,0,0,1" BorderBrush="#E5E7EB"
+                                                  Margin="0" Padding="4,3">
+                                                <TextBlock Grid.Column="0" Text="{Binding SymbolRate}" HorizontalAlignment="Center"/>
+                                                <TextBlock Grid.Column="1" Text="{Binding Modulation}" HorizontalAlignment="Center"/>
+                                                <TextBlock Grid.Column="2" Text="{Binding CodeRate}" HorizontalAlignment="Center"/>
+                                                <TextBlock Grid.Column="3" Text="{Binding RollOff, StringFormat='{}{0:F2}'}" HorizontalAlignment="Center"/>
+                                                <TextBlock Grid.Column="4" Text="{Binding SpectralEfficiency, StringFormat='{}{0:F4}'}" HorizontalAlignment="Center"/>
+                                                <TextBlock Grid.Column="5" Text="{Binding TheoreticalThreshold, StringFormat='{}{0:F2}'}" HorizontalAlignment="Center"/>
+                                                <TextBox Grid.Column="6" Text="{Binding EsPlusN0, StringFormat='{}{0:F3}'}"
+                                                         HorizontalAlignment="Center" Background="Transparent"
+                                                         BorderThickness="0" Padding="2,2" FontSize="14"/>
+                                                <TextBlock Grid.Column="7" Text="{Binding EsN0, StringFormat='{}{0:F2}'}" HorizontalAlignment="Center"/>
+                                                <TextBlock Grid.Column="8" Text="{Binding EbN0, StringFormat='{}{0:F2}'}" HorizontalAlignment="Center"/>
+                                                <TextBlock Grid.Column="9" Text="{Binding ThresholdDeviation, StringFormat='{}{0:F2}'}" HorizontalAlignment="Center"/>
+                                            </Grid>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+                            </ScrollViewer>
+                        </Grid>
                     </Grid>
                 </TabItem>
             </TabControl>
