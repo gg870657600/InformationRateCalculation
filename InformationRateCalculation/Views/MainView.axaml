@@ -544,7 +544,8 @@
                                                     <TextBlock Grid.Column="4" Text="{Binding SpectralEfficiency, StringFormat='{}{0:F4}'}" HorizontalAlignment="Center"/>
                                                     <TextBlock Grid.Column="5" Text="{Binding TheoreticalThreshold, StringFormat='{}{0:F2}'}" HorizontalAlignment="Center"/>
                                                     <TextBox Grid.Column="6" Text="{Binding EsPlusN0, StringFormat='{}{0:F3}'}"
-                                                             HorizontalAlignment="Center" Background="Transparent"
+                                                             HorizontalAlignment="Center" VerticalAlignment="Center"
+                                                             Background="Transparent"
                                                              BorderThickness="0" Padding="2,2" FontSize="14"/>
                                                     <TextBlock Grid.Column="7" Text="{Binding EsN0, StringFormat='{}{0:F2}'}" HorizontalAlignment="Center"/>
                                                     <TextBlock Grid.Column="8" Text="{Binding EbN0, StringFormat='{}{0:F2}'}" HorizontalAlignment="Center"/>
