@@ -22,6 +22,7 @@ public partial class MainViewModel : ViewModelBase
 
         OnSelectedFecChanged(SelectedFec);
         OnSelectedSlotLenChanged(SelectedSlotLen);
+        FilteredThresholdData = new ObservableCollection<TdmThresholdOption>(_allThresholdData);
     }
     // ✅ FEC 选项列表（固定不变）
     #region TDM
@@ -502,6 +503,94 @@ public partial class MainViewModel : ViewModelBase
         //SelectedModulationOption2 = SelectedModulationOption2;           // 再设回去 → 触发 PropertyChanged
     }
     #endregion
+
+    #region TDM门限
+    public List<decimal> ThresholdSymRateOptions { get; } = new() { 128, 1000 };
+    public List<string> ThresholdModulationOptions { get; } = new() { "QPSK", "8PSK", "16APSK", "32APSK" };
+
+    private static readonly Dictionary<string, List<string>> ModulationCodeRateMap = new()
+    {
+        ["QPSK"]   = new() { "1/2", "3/4", "8/9" },
+        ["8PSK"]   = new() { "3/4", "8/9" },
+        ["16APSK"] = new() { "3/4", "8/9" },
+        ["32APSK"] = new() { "8/9" }
+    };
+
+    [ObservableProperty]
+    private List<string> _thresholdCodeRateOptions = new() { "1/2", "3/4", "8/9" };
+
+    [ObservableProperty]
+    private decimal? _selectedThresholdSymRate;
+
+    [ObservableProperty]
+    private string? _selectedThresholdModulation;
+
+    [ObservableProperty]
+    private string? _selectedThresholdCodeRate;
+
+    [ObservableProperty]
+    private ObservableCollection<TdmThresholdOption> _filteredThresholdData = new();
+
+    private List<TdmThresholdOption> _allThresholdData = new()
+    {
+        // 128Ksps
+        new() { SymbolRate=128, Modulation="QPSK",   CodeRate="1/2", RollOff=0.25m, SpectralEfficiency=1.0000m, TheoreticalThreshold=0.95m,  EsPlusN0=3.908m,  InitialEsPlusN0=3.908m },
+        new() { SymbolRate=128, Modulation="QPSK",   CodeRate="3/4", RollOff=0.25m, SpectralEfficiency=1.5000m, TheoreticalThreshold=4.48m,  EsPlusN0=6.259m,  InitialEsPlusN0=6.259m },
+        new() { SymbolRate=128, Modulation="QPSK",   CodeRate="8/9", RollOff=0.25m, SpectralEfficiency=1.7778m, TheoreticalThreshold=6.60m,  EsPlusN0=7.644m,  InitialEsPlusN0=7.644m },
+        new() { SymbolRate=128, Modulation="8PSK",   CodeRate="3/4", RollOff=0.25m, SpectralEfficiency=2.2500m, TheoreticalThreshold=8.47m,  EsPlusN0=9.634m,  InitialEsPlusN0=9.634m },
+        new() { SymbolRate=128, Modulation="8PSK",   CodeRate="8/9", RollOff=0.25m, SpectralEfficiency=2.6667m, TheoreticalThreshold=11.26m, EsPlusN0=12.276m, InitialEsPlusN0=12.276m },
+        new() { SymbolRate=128, Modulation="16APSK", CodeRate="3/4", RollOff=0.25m, SpectralEfficiency=3.0000m, TheoreticalThreshold=10.77m, EsPlusN0=11.847m, InitialEsPlusN0=11.847m },
+        new() { SymbolRate=128, Modulation="16APSK", CodeRate="8/9", RollOff=0.25m, SpectralEfficiency=3.5556m, TheoreticalThreshold=13.46m, EsPlusN0=14.024m, InitialEsPlusN0=14.024m },
+        new() { SymbolRate=128, Modulation="32APSK", CodeRate="8/9", RollOff=0.25m, SpectralEfficiency=4.4444m, TheoreticalThreshold=16.41m, EsPlusN0=17.157m, InitialEsPlusN0=17.157m },
+        // 1000Ksps
+        new() { SymbolRate=1000, Modulation="QPSK",   CodeRate="1/2", RollOff=0.25m, SpectralEfficiency=1.0000m, TheoreticalThreshold=0.95m,  EsPlusN0=3.962m,  InitialEsPlusN0=3.962m },
+        new() { SymbolRate=1000, Modulation="QPSK",   CodeRate="3/4", RollOff=0.25m, SpectralEfficiency=1.5000m, TheoreticalThreshold=4.48m,  EsPlusN0=6.174m,  InitialEsPlusN0=6.174m },
+        new() { SymbolRate=1000, Modulation="QPSK",   CodeRate="8/9", RollOff=0.25m, SpectralEfficiency=1.7778m, TheoreticalThreshold=6.60m,  EsPlusN0=7.695m,  InitialEsPlusN0=7.695m },
+        new() { SymbolRate=1000, Modulation="8PSK",   CodeRate="3/4", RollOff=0.25m, SpectralEfficiency=2.2500m, TheoreticalThreshold=8.47m,  EsPlusN0=9.631m,  InitialEsPlusN0=9.631m },
+        new() { SymbolRate=1000, Modulation="8PSK",   CodeRate="8/9", RollOff=0.25m, SpectralEfficiency=2.6667m, TheoreticalThreshold=11.26m, EsPlusN0=12.008m, InitialEsPlusN0=12.008m },
+        new() { SymbolRate=1000, Modulation="16APSK", CodeRate="3/4", RollOff=0.25m, SpectralEfficiency=3.0000m, TheoreticalThreshold=10.77m, EsPlusN0=11.614m, InitialEsPlusN0=11.614m },
+        new() { SymbolRate=1000, Modulation="16APSK", CodeRate="8/9", RollOff=0.25m, SpectralEfficiency=3.5556m, TheoreticalThreshold=13.46m, EsPlusN0=14.318m, InitialEsPlusN0=14.318m },
+        new() { SymbolRate=1000, Modulation="32APSK", CodeRate="8/9", RollOff=0.25m, SpectralEfficiency=4.4444m, TheoreticalThreshold=16.41m, EsPlusN0=17.8m,   InitialEsPlusN0=17.8m }
+    };
+
+    partial void OnSelectedThresholdSymRateChanged(decimal? value) => UpdateFilteredThresholdData();
+    partial void OnSelectedThresholdModulationChanged(string? value)
+    {
+        // 调制方式变化时，更新编码码率选项并重置为第一个可用码率
+        if (!string.IsNullOrEmpty(value) && ModulationCodeRateMap.TryGetValue(value, out var rates))
+        {
+            ThresholdCodeRateOptions = rates;
+            SelectedThresholdCodeRate = rates.First();
+        }
+        UpdateFilteredThresholdData();
+    }
+    partial void OnSelectedThresholdCodeRateChanged(string? value) => UpdateFilteredThresholdData();
+
+    private void UpdateFilteredThresholdData()
+    {
+        IEnumerable<TdmThresholdOption> query = _allThresholdData;
+        if (SelectedThresholdSymRate.HasValue)
+            query = query.Where(t => t.SymbolRate == SelectedThresholdSymRate.Value);
+        if (!string.IsNullOrEmpty(SelectedThresholdModulation))
+            query = query.Where(t => t.Modulation == SelectedThresholdModulation);
+        if (!string.IsNullOrEmpty(SelectedThresholdCodeRate))
+            query = query.Where(t => t.CodeRate == SelectedThresholdCodeRate);
+        FilteredThresholdData = new ObservableCollection<TdmThresholdOption>(query);
+    }
+
+    public void RestoreThresholdDefaults()
+    {
+        foreach (var item in _allThresholdData)
+        {
+            item.EsPlusN0 = item.InitialEsPlusN0;
+        }
+        SelectedThresholdSymRate = null;
+        SelectedThresholdModulation = null;
+        SelectedThresholdCodeRate = null;
+        ThresholdCodeRateOptions = new() { "1/2", "3/4", "8/9" };
+        FilteredThresholdData = new ObservableCollection<TdmThresholdOption>(_allThresholdData);
+    }
+    #endregion
 }
 public class ModulationOption
 {
@@ -617,4 +706,52 @@ public class DecimalFormatConverter : IValueConverter
         }
         return 0m; // 默认返回0
     }
+}
+
+public partial class TdmThresholdOption : ObservableObject
+{
+    [ObservableProperty]
+    private decimal _symbolRate;
+
+    [ObservableProperty]
+    private string _modulation = string.Empty;
+
+    [ObservableProperty]
+    private string _codeRate = string.Empty;
+
+    [ObservableProperty]
+    private decimal _rollOff;
+
+    [ObservableProperty]
+    private decimal _spectralEfficiency;
+
+    [ObservableProperty]
+    private decimal _theoreticalThreshold;
+
+    [ObservableProperty]
+    private decimal _esPlusN0;
+
+    public decimal InitialEsPlusN0 { get; set; }
+
+    public decimal EsN0 => 10m * (decimal)Math.Log10((double)(decimal)Math.Pow(10, (double)EsPlusN0 / 10) - 1);
+
+    public decimal EbN0 => EsN0 - 10m * (decimal)Math.Log10((double)SpectralEfficiency);
+
+    public decimal ThresholdDeviation => EsN0 - TheoreticalThreshold;
+
+    partial void OnEsPlusN0Changed(decimal value)
+    {
+        OnPropertyChanged(nameof(EsN0));
+        OnPropertyChanged(nameof(EbN0));
+        OnPropertyChanged(nameof(ThresholdDeviation));
+    }
+}
+
+public class KspsConverter : IValueConverter
+{
+    public static readonly KspsConverter Instance = new();
+    public object Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
+        => value is decimal d ? $"{d} Ksps" : string.Empty;
+    public object ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
+        => throw new NotSupportedException();
 }
