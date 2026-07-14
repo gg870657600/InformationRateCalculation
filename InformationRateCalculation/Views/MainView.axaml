@@ -591,7 +591,7 @@
                                                     <TextBox Grid.Column="6" Text="{Binding EsPlusN0, StringFormat='{}{0:F3}'}"
                                                              HorizontalAlignment="Center" VerticalAlignment="Center"
                                                              Background="#FFF9C4" BorderBrush="#F9A825" BorderThickness="1"
-                                                             Padding="2,2" FontSize="14"/>
+                                                             FontSize="14"/>
                                                     <TextBlock Grid.Column="7" Text="{Binding EsN0, StringFormat='{}{0:F2}'}" HorizontalAlignment="Center"/>
                                                     <TextBlock Grid.Column="8" Text="{Binding EbN0, StringFormat='{}{0:F2}'}" HorizontalAlignment="Center"/>
                                                     <TextBlock Grid.Column="9" Text="{Binding ThresholdDeviation, StringFormat='{}{0:F2}'}" HorizontalAlignment="Center"/>
@@ -678,7 +678,7 @@
                                                     <TextBox Grid.Column="8" Text="{Binding EsPlusN0, StringFormat='{}{0:F3}'}"
                                                              HorizontalAlignment="Center" VerticalAlignment="Center"
                                                              Background="#FFF9C4" BorderBrush="#F9A825" BorderThickness="1"
-                                                             Padding="2,2" FontSize="14"/>
+                                                             FontSize="14"/>
                                                     <TextBlock Grid.Column="9" Text="{Binding EsN0, StringFormat='{}{0:F2}'}" HorizontalAlignment="Center"/>
                                                     <TextBlock Grid.Column="10" Text="{Binding EbN0, StringFormat='{}{0:F2}'}" HorizontalAlignment="Center"/>
                                                     <TextBlock Grid.Column="11" Text="{Binding TheoryDiff, StringFormat='{}{0:F2}'}" HorizontalAlignment="Center"/>

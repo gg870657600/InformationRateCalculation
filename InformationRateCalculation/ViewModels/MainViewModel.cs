@@ -353,7 +353,7 @@ public partial class MainViewModel : ViewModelBase
     //符号速率
     public List<decimal> TdmaSymRate { get; } = new()
         {
-            128,160,192,256,320,384,512,640,800,960,1000,1280,1600,2000,2560,3200,4096,6400,8000,10000
+            128,200,320,500,640,800,1000,1600,2000,2560,3200,4000,6400,8000,10000
         };
     //当前选中的符号速率
     [ObservableProperty]
